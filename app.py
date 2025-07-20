@@ -1,5 +1,5 @@
 # app.py
-# This is the main file for your ClimaFit website, now with a refined header layout!
+# This is the main file for your ClimaFit website, with Digital Closet feature removed.
 
 import streamlit as st
 import requests
@@ -79,34 +79,28 @@ if "captured_image" not in st.session_state:
     st.session_state.captured_image = None
 if "identified_body_type" not in st.session_state:
     st.session_state.identified_body_type = None
+# digital_closet_items removed as feature is removed
+# if "digital_closet_items" not in st.session_state:
+#    st.session_state.digital_closet_items = []
 
 # --- TOP HEADER & DYNAMIC BUTTONS ---
-# Use a container for the entire header section to keep it grouped
 with st.container():
-    # Create columns for the logo/title block and the dynamic buttons (login/logout)
     header_main_col, header_buttons_col = st.columns([4, 1])
 
     with header_main_col:
-        # Nested columns for logo and text
-        logo_col, text_col = st.columns([0.5, 3]) # Adjust ratio as needed for your logo size
+        logo_col, text_col = st.columns([0.5, 3])
 
         with logo_col:
-            # Your custom logo from local folder!
-            # Adjust width as needed to fit your logo's aspect ratio.
-            st.image("outfit_images/image.png", width=250) # Reduced width for better alignment
+            st.image("outfit_images/logo.jpg", width=100)
 
         with text_col:
-            # --- INCREASED SIZE OF CLIMAFIT HEADER HERE! ---
-            # Using st.markdown with H1 for largest possible text
             st.markdown("# ClimaFit") 
-            st.markdown("### Your Personalized Outfit Recommender ☀️") # Main tagline
-            st.markdown("*Made with ❤️ for fashion enthusiasts everywhere!*") # Secondary tagline
+            st.markdown("### Your Personalized Outfit Recommender ☀️")
+            st.markdown("*Made with ❤️ for fashion enthusiasts everywhere!*")
 
     with header_buttons_col:
-        st.write("") # Add some space to push buttons down slightly
-        st.write("") # More space
-
-        # --- Login/Logout Button ---
+        st.write("")
+        st.write("")
         if st.session_state.logged_in:
             st.success(f"Welcome, {st.session_state.username}!")
             if st.button("Logout"):
@@ -115,6 +109,7 @@ with st.container():
                 st.session_state.show_login_form = False
                 st.session_state.captured_image = None
                 st.session_state.identified_body_type = None
+                # st.session_state.digital_closet_items = [] # Removed as feature is removed
                 st.rerun()
         else:
             if st.button("Login / Sign Up"):
@@ -149,10 +144,10 @@ with st.container():
                                     st.rerun()
                                 else:
                                     st.error("Please enter both username and password.")
-                    st.markdown("*(Note: This is a frontend-only simulated login/signup for demonstration.)*")
+                st.markdown("*(Note: This is a frontend-only simulated login/signup for demonstration.)*")
 
 
-st.write("---") # Separator line after header
+st.write("---")
 
 # --- Main Application Content (Always visible, but features enabled only if logged in) ---
 control_column, display_column = st.columns([1, 3])
@@ -206,41 +201,37 @@ with control_column:
 
     st.markdown("---")
 
-    # --- NEW: My Digital Closet Section ---
-    st.subheader("My Digital Closet")
-    st.info("Upload your clothing items here! (Simulated AI Categorization)")
+    # --- My Digital Closet Section REMOVED COMPLETELY ---
+    # st.subheader("My Digital Closet")
+    # st.info("Upload your clothing items here! (Simulated AI Categorization)")
+    # uploaded_clothing_file = st.file_uploader("Upload a clothing item image:", type=["jpg", "jpeg", "png"], disabled=is_disabled)
+    # if uploaded_clothing_file is not None:
+    #     st.image(uploaded_clothing_file, caption="Uploaded Item", use_container_width=True)
+    #     if st.button("Analyze & Add to Closet", disabled=is_disabled):
+    #         with st.spinner("Analyzing clothing item... (Simulated AI)"):
+    #             simulated_clothing_type = random.choice(["Top", "Bottom", "Dress", "Outerwear", "Shoes", "Accessory"])
+    #             simulated_clothing_color = random.choice(["Red", "Blue", "Green", "Black", "White", "Gray", "Yellow", "Pink"])
+    #             new_closet_item = {
+    #                 "image_data": uploaded_clothing_file.getvalue(),
+    #                 "type": simulated_clothing_type,
+    #                 "color": simulated_clothing_color
+    #             }
+    #             st.session_state.digital_closet_items.append(new_closet_item)
+    #             st.success(f"AI identified: **{simulated_clothing_color} {simulated_clothing_type}** added to your closet!")
+    #             st.rerun()
+    # if st.session_state.digital_closet_items:
+    #     st.markdown("---")
+    #     st.subheader("Your Closet Items:")
+    #     closet_cols = st.columns(3)
+    #     for i, item in enumerate(st.session_state.digital_closet_items):
+    #         with closet_cols[i % 3]:
+    #             st.image(item["image_data"], caption=f"{item['color']} {item['type']}", use_container_width=True)
+    # else:
+    #     st.info("Your digital closet is empty. Upload items to start building it!")
+    # st.markdown("---") # Separator before recommendations button
 
-    uploaded_clothing_file = st.file_uploader("Upload a clothing item image:", type=["jpg", "jpeg", "png"], disabled=is_disabled)
-
-    if uploaded_clothing_file is not None:
-        st.image(uploaded_clothing_file, caption="Uploaded Item", use_container_width=True)
-        if st.button("Analyze & Add to Closet", disabled=is_disabled):
-            with st.spinner("Analyzing clothing item... (Simulated AI)"):
-                # Simulate AI identifying clothing type and color
-                simulated_clothing_type = random.choice(["Top", "Bottom", "Dress", "Outerwear", "Shoes", "Accessory"])
-                simulated_clothing_color = random.choice(["Red", "Blue", "Green", "Black", "White", "Gray", "Yellow", "Pink"])
-                
-                new_closet_item = {
-                    "image_data": uploaded_clothing_file.getvalue(), # Store bytes data
-                    "type": simulated_clothing_type,
-                    "color": simulated_clothing_color
-                }
-                st.session_state.digital_closet_items.append(new_closet_item)
-                st.success(f"AI identified: **{simulated_clothing_color} {simulated_clothing_type}** added to your closet!")
-                st.rerun() # Rerun to update the closet display
-
-    if st.session_state.digital_closet_items:
-        st.markdown("---")
-        st.subheader("Your Closet Items:")
-        # Display closet items in a grid
-        closet_cols = st.columns(3)
-        for i, item in enumerate(st.session_state.digital_closet_items):
-            with closet_cols[i % 3]: # Display up to 3 items per row
-                st.image(item["image_data"], caption=f"{item['color']} {item['type']}", use_container_width=True)
-    else:
-        st.info("Your digital closet is empty. Upload items to start building it!")
-
-    st.markdown("---") # Separator before recommendations button
+    # Separator after Preferences and Camera
+    st.markdown("---") 
 
     get_recommendations_button = st.button("✨ Get Outfit Recommendations", disabled=is_disabled)
 
